@@ -3,6 +3,7 @@ import { UserController } from "./user.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import {
   createAdminZodSchema,
+  createDoctorZodSchema,
   createPatientZodSchema,
 } from "./user.validation";
 import { fileUploader } from "../../utils/fileUploder";
@@ -16,12 +17,16 @@ userRouter.post(
   UserController.createPatient
 );
 
-// TODO
-// create admin and doctor
-
 userRouter.post(
   "/create-admin",
   fileUploader.upload.single("file"),
   validateRequest(createAdminZodSchema),
   UserController.createAdmin
+);
+
+userRouter.post(
+  "/create-doctor",
+  fileUploader.upload.single("file"),
+  validateRequest(createDoctorZodSchema),
+  UserController.createDoctor
 );
