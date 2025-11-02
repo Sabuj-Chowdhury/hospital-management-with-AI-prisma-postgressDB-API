@@ -90,17 +90,37 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
 const getAllUsers = async ({
   page,
   limit,
+  search,
+  sort,
+  order,
 }: {
   page: number;
   limit: number;
+  search: any;
+  sort: any;
+  order: any;
 }) => {
-  // console.log(page, limit);
+  console.log(search);
 
   const skip = (page - 1) * limit;
 
   const allUsers = await prisma.user.findMany({
     take: limit,
     skip,
+    where: {
+      email: {
+        contains: search,
+        mode: "insensitive",
+      },
+    },
+    orderBy:
+      sort && order
+        ? {
+            [sort]: order,
+          }
+        : {
+            createdAt: "desc",
+          },
   });
   return allUsers;
 };

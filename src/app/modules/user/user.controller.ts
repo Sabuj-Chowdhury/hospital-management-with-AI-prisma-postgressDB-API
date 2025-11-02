@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import { UserService } from "./user.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
+import { any } from "zod";
 
 const createPatient = catchAsync(async (req: Request, res: Response) => {
   // console.log(`Controller create patient `, req);
@@ -38,10 +39,20 @@ const createDoctor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  const page = Number(req.query.page);
-  const limit = Number(req.query.limit);
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const search = req.query.search || "";
+  const sort = req.query.sort || "";
+  const order = req.query.order || "";
+  // console.log(search);
 
-  const result = await UserService.getAllUsers({ page, limit });
+  const result = await UserService.getAllUsers({
+    page,
+    limit,
+    search,
+    sort,
+    order,
+  });
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
