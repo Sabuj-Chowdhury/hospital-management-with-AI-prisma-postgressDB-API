@@ -12,3 +12,6 @@ userRouter.post(
   validateRequest(createPatientZodSchema),
   UserController.createPatient
 );
+
+// TODO
+// create admin and doctor
