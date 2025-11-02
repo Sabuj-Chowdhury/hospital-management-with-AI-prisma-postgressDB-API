@@ -38,7 +38,10 @@ const createDoctor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getAllUsers();
+  const page = Number(req.query.page);
+  const limit = Number(req.query.limit);
+
+  const result = await UserService.getAllUsers({ page, limit });
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

@@ -87,8 +87,21 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
   return result;
 };
 
-const getAllUsers = async () => {
-  const allUsers = await prisma.user.findMany();
+const getAllUsers = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}) => {
+  // console.log(page, limit);
+
+  const skip = (page - 1) * limit;
+
+  const allUsers = await prisma.user.findMany({
+    take: limit,
+    skip,
+  });
   return allUsers;
 };
 
