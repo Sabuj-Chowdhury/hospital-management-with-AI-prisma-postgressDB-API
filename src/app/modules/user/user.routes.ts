@@ -10,6 +10,8 @@ import { fileUploader } from "../../utils/fileUploder";
 
 export const userRouter = Router();
 
+userRouter.get("/", UserController.getAllUsers);
+
 userRouter.post(
   "/create-patient",
   fileUploader.upload.single("file"),

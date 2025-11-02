@@ -87,8 +87,14 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
   return result;
 };
 
+const getAllUsers = async () => {
+  const allUsers = await prisma.user.findMany();
+  return allUsers;
+};
+
 export const UserService = {
   createPatient,
   createAdmin,
   createDoctor,
+  getAllUsers,
 };
