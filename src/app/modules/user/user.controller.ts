@@ -44,6 +44,8 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   const search = req.query.search || "";
   const sort = req.query.sort || "";
   const order = req.query.order || "";
+  const role = req.query.role || "";
+  const status = req.query.status || "";
   // console.log(search);
 
   const result = await UserService.getAllUsers({
@@ -52,6 +54,8 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     search,
     sort,
     order,
+    role,
+    status,
   });
   sendResponse(res, {
     statusCode: httpStatus.OK,
