@@ -4,6 +4,7 @@ import { UserService } from "./user.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { any } from "zod";
+import pick from "../../utils/pick";
 
 const createPatient = catchAsync(async (req: Request, res: Response) => {
   // console.log(`Controller create patient `, req);
@@ -39,6 +40,9 @@ const createDoctor = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+  // to use the dynamic pick function
+  const options = pick(req.query, ["page", "limit", "sort", "order"]);
+
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const search = req.query.search || "";
