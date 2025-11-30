@@ -7,10 +7,12 @@ import {
   createPatientZodSchema,
 } from "./user.validation";
 import { fileUploader } from "../../utils/fileUploder";
+import { checkAuth } from "../../middlewares/checkAuth";
+import { UserRole } from "@prisma/client";
 
 export const userRouter = Router();
 
-userRouter.get("/", UserController.getAllUsers);
+userRouter.get("/", checkAuth(UserRole.ADMIN), UserController.getAllUsers);
 
 userRouter.post(
   "/create-patient",
