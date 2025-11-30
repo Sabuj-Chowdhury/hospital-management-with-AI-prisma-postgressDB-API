@@ -3,7 +3,9 @@ import { prisma } from "../../config/prismaInstance";
 
 import bcrypt from "bcryptjs";
 import { fileUploader } from "../../utils/fileUploder";
-import { Admin, Doctor, UserRole } from "@prisma/client";
+import { Admin, Doctor, Prisma, UserRole } from "@prisma/client";
+import { paginationHelper, TOptions } from "../../utils/paginationHelper";
+import { userSearchableField } from "./user.constant";
 
 const createPatient = async (req: Request) => {
   if (req.file) {
@@ -87,47 +89,51 @@ const createDoctor = async (req: Request): Promise<Doctor> => {
   return result;
 };
 
-const getAllUsers = async ({
-  page,
-  limit,
-  search,
-  sort,
-  order,
-  role,
-  status,
-}: {
-  page: number;
-  limit: number;
-  search: any;
-  sort: any;
-  order: any;
-  role: any;
-  status: any;
-}) => {
-  console.log(search);
+const getAllUsers = async (filters: any, options: TOptions) => {
+  const { page, limit, skip, sort, order } =
+    paginationHelper.calculatePagination(options);
 
-  const skip = (page - 1) * limit;
+  const { search, ...filterData } = filters;
+
+  const andConditions: Prisma.UserWhereInput[] = [];
+  // console.log(andConditions);
+
+  if (search) {
+    andConditions.push({
+      OR: userSearchableField.map((field) => ({
+        [field]: {
+          contains: search,
+          mode: "insensitive",
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.keys(filterData).map((key) => ({
+        [key]: {
+          equals: (filterData as any)[key],
+        },
+      })),
+    });
+  }
+
+  // console.log(andConditions);
 
   const allUsers = await prisma.user.findMany({
     take: limit,
     skip,
     where: {
-      email: {
-        contains: search,
-        mode: "insensitive",
-      },
-      role: role,
-      status: status,
+      AND: andConditions,
     },
-    orderBy:
-      sort && order
-        ? {
-            [sort]: order,
-          }
-        : {
-            createdAt: "desc",
-          },
+    orderBy: {
+      [sort]: order,
+    },
   });
+
+  // const total = await prisma.user.count({});
+
   return allUsers;
 };
 
