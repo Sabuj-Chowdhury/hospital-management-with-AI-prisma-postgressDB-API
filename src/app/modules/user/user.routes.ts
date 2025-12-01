@@ -23,6 +23,7 @@ userRouter.post(
 
 userRouter.post(
   "/create-admin",
+  checkAuth(UserRole.ADMIN),
   fileUploader.upload.single("file"),
   validateRequest(createAdminZodSchema),
   UserController.createAdmin
@@ -30,6 +31,7 @@ userRouter.post(
 
 userRouter.post(
   "/create-doctor",
+  checkAuth(UserRole.ADMIN),
   fileUploader.upload.single("file"),
   validateRequest(createDoctorZodSchema),
   UserController.createDoctor

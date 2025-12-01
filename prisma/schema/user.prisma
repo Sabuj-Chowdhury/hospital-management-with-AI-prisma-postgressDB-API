@@ -14,8 +14,6 @@ model User {
   @@map("users")
 }
 
-
-
 model Admin {
   id            String   @id @default(uuid())
   name          String
@@ -39,7 +37,7 @@ model Doctor {
   contactNumber       String
   address             String?
   registrationNumber  String
-  experience          Int?      @default(0)
+  experience          Int?     @default(0)
   gender              Gender
   appointmentFee      Int
   qualification       String
@@ -49,7 +47,8 @@ model Doctor {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  user User @relation(fields: [email], references: [email])
+  user            User              @relation(fields: [email], references: [email])
+  doctorSchedules DoctorSchedules[]
 
   @@map("doctors")
 }
@@ -69,4 +68,3 @@ model Patient {
 
   @@map("patients")
 }
-
