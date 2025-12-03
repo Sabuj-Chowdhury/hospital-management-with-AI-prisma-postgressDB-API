@@ -4,6 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 
 import httpStatus from "http-status";
 import { ScheduleServices } from "./schedules.service";
+import pick from "../../utils/pick";
 
 const createSchedule = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -19,7 +20,10 @@ const createSchedule = catchAsync(async (req: Request, res: Response) => {
 });
 
 const schedulesForDoctor = catchAsync(async (req: Request, res: Response) => {
-  const result = await ScheduleServices.schedulesForDoctor();
+  const options = pick(req.query, ["page", "limit", "sort", "order"]); //pagination
+  const filters = pick(req.query, ["startDateTime", "endDateTime"]); //filters
+
+  const result = await ScheduleServices.schedulesForDoctor(filters, options);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

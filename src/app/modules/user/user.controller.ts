@@ -41,8 +41,8 @@ const createDoctor = catchAsync(async (req: Request, res: Response) => {
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   // to use the dynamic pick function
-  const filters = pick(req.query, ["status", "role", "email", "search"]);
-  const options = pick(req.query, ["page", "limit", "sort", "order"]);
+  const filters = pick(req.query, ["status", "role", "email", "search"]); //search //sort
+  const options = pick(req.query, ["page", "limit", "sort", "order"]); //pagination
 
   // const page = Number(req.query.page) || 1;
   // const limit = Number(req.query.limit) || 10;
