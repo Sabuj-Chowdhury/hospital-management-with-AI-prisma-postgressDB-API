@@ -63,6 +63,9 @@ const createSchedule = async (payload: any) => {
   return schedules;
 };
 
+const schedulesForDoctor = () => {};
+
 export const ScheduleServices = {
   createSchedule,
+  schedulesForDoctor,
 };

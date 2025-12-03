@@ -18,6 +18,18 @@ const createSchedule = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const schedulesForDoctor = catchAsync(async (req: Request, res: Response) => {
+  const result = await ScheduleServices.schedulesForDoctor();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All schedules retrieved successfully!",
+    data: result,
+  });
+});
+
 export const ScheduleControllers = {
   createSchedule,
+  schedulesForDoctor,
 };
