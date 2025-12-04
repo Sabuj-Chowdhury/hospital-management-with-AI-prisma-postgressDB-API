@@ -29,6 +29,20 @@ const schedulesForDoctor = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "All schedules retrieved successfully!",
+    meta: result.meta,
+    data: result.data,
+  });
+});
+
+const deleteScheduleFromDB = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const result = await ScheduleServices.deleteScheduleFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Schedules Deleted successfully!",
     data: result,
   });
 });
@@ -36,4 +50,5 @@ const schedulesForDoctor = catchAsync(async (req: Request, res: Response) => {
 export const ScheduleControllers = {
   createSchedule,
   schedulesForDoctor,
+  deleteScheduleFromDB,
 };
