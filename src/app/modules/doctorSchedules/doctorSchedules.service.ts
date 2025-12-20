@@ -1,15 +1,24 @@
 import { prisma } from "../../config/prismaInstance";
+import { IJWTPayload } from "../../types/common";
 
-const createDoctorSchedules = async (user: any, payload: any) => {
-  console.log({ user, payload });
-
+const createDoctorSchedules = async (
+  user: IJWTPayload,
+  payload: { schedulesIDs: string[] }
+) => {
   const doctorData = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user.email,
     },
   });
 
-  return { user, payload }; //boilerplate
+  const doctorScheduleData = payload.schedulesIDs.map((scheduleID) => ({
+    doctorId: doctorData.id,
+    scheduleId: scheduleID,
+  }));
+
+  return await prisma.doctorSchedules.createMany({
+    data: doctorScheduleData,
+  });
 };
 
 export const DoctorSchedulesService = {
